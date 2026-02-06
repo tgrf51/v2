@@ -3,15 +3,12 @@
 <head><meta charset="utf-8"></head>
 <body>
   <script>
-    window.addEventListener("message", (event) => {
-      const { type, body } = event.data;
-      if (type === "run") {
-        // Берем только p1
-        const p1 = body.values.p1 || "";
-        // Возвращаем true, если в p1 есть хоть какой-то текст
-        const result = p1.length > 0;
-        
-        event.source.postMessage({ type: "result", body: result }, event.origin);
+    window.addEventListener("message", (e) => {
+      if (e.data.type === "run") {
+        const p1 = (e.data.body.values.p1 || "").toLowerCase();
+        const p2 = (e.data.body.values.p2 || "").toLowerCase().trim();
+        let res = p1.includes(p2);
+        e.source.postMessage({ type: "result", body: res }, e.origin);
       }
     });
   </script>
