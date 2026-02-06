@@ -2,37 +2,30 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
 </head>
 <body>
     <script>
-        // Функция для безопасного форматирования результата (аналог из TS)
-        function formatResult(x) {
-            if (x instanceof Date) return x.toISOString();
-            return x;
-        }
+        // Сообщаем Glide, что мы загрузились
+        window.parent.postMessage({ type: "ready" }, "*");
 
-        window.addEventListener("message", async (e) => {
-            // Glide отправляет сообщение с типом "run"
+        window.addEventListener("message", (e) => {
             if (e.data.type === "run") {
                 const { code, p1, p2, p3 } = e.data.body.values;
                 let result;
 
                 try {
-                    // Создаем функцию из текста, введенного в Glide
-                    // p1, p2, p3 — это ваши данные, _ — это lodash
-                    const fn = new Function('p1', 'p2', 'p3', '_', code || 'return ""');
-                    result = await fn(p1, p2, p3, _);
+                    // Создаем функцию: (p1, p2, p3) => { твой код }
+                    const fn = new Function('p1', 'p2', 'p3', code || 'return "No code"');
+                    result = fn(p1, p2, p3);
                 } catch (err) {
                     result = "Error: " + err.message;
                 }
 
-                // ВАЖНО: Без этой строки Glide будет крутить загрузку вечно!
-                // Мы должны отправить результат обратно
-                e.source.postMessage({ 
-                    type: "result", 
-                    body: formatResult(result) 
-                }, e.origin);
+                // Отправляем результат обратно
+                window.parent.postMessage({
+                    type: "result",
+                    body: result !== undefined ? result : null
+                }, "*");
             }
         });
     </script>
