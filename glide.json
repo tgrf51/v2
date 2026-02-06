@@ -1,17 +1,22 @@
 {
-  "name": "Custom Search",
-  "description": "Поиск по началу слов и фразам",
+  "name": "JavaScript Search",
+  "category": "Code",
+  "released": "sandboxed",
+  "description": "Custom search function",
   "author": "tgrf51",
   "main": "index.html",
+  "result": {
+    "type": "primitive"
+  },
   "params": [
     {
-      "id": "p1",
-      "name": "Metadata",
+      "name": "p1",
+      "displayName": "Metadata",
       "type": "primitive"
     },
     {
-      "id": "p2",
-      "name": "Query",
+      "name": "p2",
+      "displayName": "Query",
       "type": "primitive"
     }
   ]
