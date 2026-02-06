@@ -1,10 +1,18 @@
 {
-  "name": "Super JS Column",
+  "name": "JS Search",
+  "description": "Custom Search Tool",
+  "author": "tgrf51",
   "main": "index.html",
   "params": [
-    { "name": "p1", "displayName": "Данные 1", "type": "primitive" },
-    { "name": "p2", "displayName": "Данные 2", "type": "primitive" },
-    { "name": "code", "displayName": "Ваш JavaScript код", "type": "string" }
-  ],
-  "result": { "type": "primitive" }
+    {
+      "id": "p1",
+      "name": "Metadata",
+      "type": "string"
+    },
+    {
+      "id": "p2",
+      "name": "Query",
+      "type": "string"
+    }
+  ]
 }
