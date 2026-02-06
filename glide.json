@@ -1,13 +1,13 @@
 {
-  "name": "JavaScript Search",
+  "name": "Custom Search",
   "category": "Code",
   "released": "sandboxed",
-  "description": "Custom search function",
+  "description": "Custom JS Search",
   "author": "tgrf51",
-  "main": "index.html",
   "result": {
     "type": "primitive"
   },
+  "main": "index.html",
   "params": [
     {
       "name": "p1",
