@@ -25,6 +25,11 @@
       "name": "p2",
       "displayName": "p2",
       "type": "primitive"
+    },
+    {
+      "name": "p3",
+      "displayName": "p3",
+      "type": "primitive"
     }
   ]
 }
