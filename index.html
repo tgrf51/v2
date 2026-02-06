@@ -5,9 +5,9 @@
   <script>
     window.addEventListener("message", (e) => {
       if (e.data.type === "run") {
-        const p1 = (e.data.body.values.p1 || "").toLowerCase();
-        const p2 = (e.data.body.values.p2 || "").toLowerCase().trim();
-        let res = p1.includes(p2);
+        const val1 = (e.data.body.values.p1 || "").toString().toLowerCase();
+        const val2 = (e.data.body.values.p2 || "").toString().toLowerCase().trim();
+        const res = val1.includes(val2);
         e.source.postMessage({ type: "result", body: res }, e.origin);
       }
     });
