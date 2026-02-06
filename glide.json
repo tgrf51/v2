@@ -1,21 +1,10 @@
 {
-  "name": "JavaScript Search",
-  "category": "Code",
-  "released": "sandboxed",
-  "description": "Поиск по тексту",
-  "author": "Mark Probst <mark@glideapps.com>",
+  "name": "Super JS Column",
   "main": "index.html",
   "params": [
-    {
-      "name": "p1",
-      "displayName": "Текст (Metadata)",
-      "type": "primitive"
-    },
-    {
-      "name": "p2",
-      "displayName": "Что ищем (Query)",
-      "type": "primitive"
-    }
+    { "name": "p1", "displayName": "Данные 1", "type": "primitive" },
+    { "name": "p2", "displayName": "Данные 2", "type": "primitive" },
+    { "name": "code", "displayName": "Ваш JavaScript код", "type": "string" }
   ],
   "result": { "type": "primitive" }
 }
