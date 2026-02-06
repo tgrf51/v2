@@ -1,0 +1,18 @@
+{
+  "name": "Custom Search",
+  "description": "Поиск по началу слов и фразам",
+  "author": "tgrf51",
+  "main": "index.html",
+  "params": [
+    {
+      "id": "p1",
+      "name": "Metadata",
+      "type": "string"
+    },
+    {
+      "id": "p2",
+      "name": "Query",
+      "type": "string"
+    }
+  ]
+}
