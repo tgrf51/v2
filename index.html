@@ -1,13 +1,22 @@
 <!DOCTYPE html>
 <html>
+<head><meta charset="utf-8"></head>
 <body>
   <script>
-    // Слушаем сообщение от Glide
     window.addEventListener("message", (e) => {
       if (e.data.type === "run") {
-        // Мгновенно отправляем любой ответ назад
-        // Это ОБЯЗАТЕЛЬНО должно остановить бесконечный кружок
-        parent.postMessage({ type: "result", body: "Connected!" }, "*");
+        const { p1, p2 } = e.data.body.values;
+        
+        // Логика поиска
+        const val1 = (p1 || "").toString().toLowerCase();
+        const val2 = (p2 || "").toString().toLowerCase().trim();
+        const result = val1.includes(val2);
+
+        // ОТПРАВКА ОТВЕТА
+        window.parent.postMessage({
+          type: "result",
+          body: result
+        }, "*");
       }
     });
   </script>
