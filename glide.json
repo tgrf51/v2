@@ -1,18 +1,21 @@
 {
   "name": "JS Search",
-  "description": "Custom Search Tool",
+  "description": "Поиск по тексту",
   "author": "tgrf51",
   "main": "index.html",
   "params": [
     {
-      "id": "p1",
-      "name": "Metadata",
-      "type": "string"
+      "name": "p1",
+      "displayName": "Metadata",
+      "type": "primitive"
     },
     {
-      "id": "p2",
-      "name": "Query",
-      "type": "string"
+      "name": "p2",
+      "displayName": "Query",
+      "type": "primitive"
     }
-  ]
+  ],
+  "result": {
+    "type": "primitive"
+  }
 }
