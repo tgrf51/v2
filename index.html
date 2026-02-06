@@ -1,35 +1,16 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-</head>
+<head><meta charset="utf-8"></head>
 <body>
   <script>
-    // Слушаем данные от Glide
     window.addEventListener("message", (event) => {
       const { type, body } = event.data;
       if (type === "run") {
+        // Берем только p1
         const p1 = body.values.p1 || "";
-        const p2 = body.values.p2 || "";
-        let result = false;
-
-        const query = p2.toLowerCase().trim();
-        const target = p1.toLowerCase();
-
-        if (query === "") {
-          result = true;
-        } else if (target !== "") {
-          // 1. Поиск фразы
-          if (query.length > 3 || query.includes(" ")) {
-            if (target.includes(query)) result = true;
-          }
-          // 2. Поиск по началу слов
-          if (!result) {
-            const words = target.split(/[^a-zа-яё0-9]+/i);
-            result = words.some(word => word.startsWith(query));
-          }
-        }
-        // Отправляем результат обратно в Glide
+        // Возвращаем true, если в p1 есть хоть какой-то текст
+        const result = p1.length > 0;
+        
         event.source.postMessage({ type: "result", body: result }, event.origin);
       }
     });
