@@ -1,31 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+    <meta charset="utf-8">
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
 </head>
 <body>
-  <script>
-    // 1. Сразу говорим Glide, что мы живы
-    parent.postMessage({ type: "ready" }, "*");
+    <script>
+        // Сразу уведомляем Glide, что мы готовы принимать команды
+        window.parent.postMessage({ type: "ready" }, "*");
 
-    window.addEventListener("message", (e) => {
-      if (e.data.type === "run") {
-        const { code, p1, p2, p3 } = e.data.body.values;
-        let result;
+        window.addEventListener("message", (e) => {
+            if (e.data.type === "run") {
+                const { code, p1, p2, p3 } = e.data.body.values;
+                let result = null;
 
-        try {
-          // 2. Создаем функцию «на лету» из того, что ты напишешь в Glide
-          const fn = new Function('p1', 'p2', 'p3', '_', code || 'return "Введите код"');
-          result = fn(p1, p2, p3, _);
-        } catch (err) {
-          result = "Error: " + err.message;
-        }
+                try {
+                    // Компилируем и запускаем код из поля "JavaScript code"
+                    const fn = new Function('p1', 'p2', 'p3', '_', code || 'return null');
+                    result = fn(p1, p2, p3, _);
+                } catch (err) {
+                    result = "Error: " + err.message;
+                }
 
-        // 3. Отправляем результат обратно (ЭТО УБЕРЕТ КРУЖОК)
-        parent.postMessage({ type: "result", body: result }, "*");
-      }
-    });
-  </script>
+                // ГЛАВНОЕ: Отправляем результат обратно родителю (Glide)
+                // Используем window.parent.postMessage для максимальной совместимости
+                window.parent.postMessage({
+                    type: "result",
+                    body: result !== undefined ? result : null
+                }, "*");
+            }
+        });
+    </script>
 </body>
 </html>
