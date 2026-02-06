@@ -2,32 +2,35 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
 </head>
 <body>
     <script>
-        // Сразу уведомляем Glide, что мы готовы принимать команды
-        window.parent.postMessage({ type: "ready" }, "*");
+        // Функция отправки ответа
+        function send(type, body) {
+            window.parent.postMessage({ type, body }, "*");
+        }
+
+        // Сообщаем, что мы загрузились, каждые 500мс, пока Glide не ответит
+        const readyInterval = setInterval(() => send("ready"), 500);
 
         window.addEventListener("message", (e) => {
             if (e.data.type === "run") {
+                // Как только получили данные, перестаем спамить "ready"
+                clearInterval(readyInterval);
+
                 const { code, p1, p2, p3 } = e.data.body.values;
-                let result = null;
+                let result;
 
                 try {
-                    // Компилируем и запускаем код из поля "JavaScript code"
-                    const fn = new Function('p1', 'p2', 'p3', '_', code || 'return null');
-                    result = fn(p1, p2, p3, _);
+                    // Твой код из Glide превращается в функцию
+                    const fn = new Function('p1', 'p2', 'p3', code || 'return null');
+                    result = fn(p1, p2, p3);
                 } catch (err) {
                     result = "Error: " + err.message;
                 }
 
-                // ГЛАВНОЕ: Отправляем результат обратно родителю (Glide)
-                // Используем window.parent.postMessage для максимальной совместимости
-                window.parent.postMessage({
-                    type: "result",
-                    body: result !== undefined ? result : null
-                }, "*");
+                // Отправляем результат обратно
+                send("result", result !== undefined ? result : null);
             }
         });
     </script>
