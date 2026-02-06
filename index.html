@@ -6,21 +6,33 @@
 </head>
 <body>
     <script>
-        window.addEventListener("message", (e) => {
+        // Функция для безопасного форматирования результата (аналог из TS)
+        function formatResult(x) {
+            if (x instanceof Date) return x.toISOString();
+            return x;
+        }
+
+        window.addEventListener("message", async (e) => {
+            // Glide отправляет сообщение с типом "run"
             if (e.data.type === "run") {
                 const { code, p1, p2, p3 } = e.data.body.values;
                 let result;
-                
+
                 try {
-                    // Это позволяет тебе писать JS код прямо в поле Glide!
-                    const fn = new Function('p1', 'p2', 'p3', '_', code);
-                    result = fn(p1, p2, p3, _);
+                    // Создаем функцию из текста, введенного в Glide
+                    // p1, p2, p3 — это ваши данные, _ — это lodash
+                    const fn = new Function('p1', 'p2', 'p3', '_', code || 'return ""');
+                    result = await fn(p1, p2, p3, _);
                 } catch (err) {
                     result = "Error: " + err.message;
                 }
 
-                // ВАЖНО: Без этого ответа будет бесконечный кружок
-                parent.postMessage({ type: "result", body: result }, "*");
+                // ВАЖНО: Без этой строки Glide будет крутить загрузку вечно!
+                // Мы должны отправить результат обратно
+                e.source.postMessage({ 
+                    type: "result", 
+                    body: formatResult(result) 
+                }, e.origin);
             }
         });
     </script>
