@@ -1,29 +1,25 @@
 <!DOCTYPE html>
 <html>
-<head><meta charset="utf-8"></head>
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+</head>
 <body>
   <script>
-    // Эта функция — аналог convertDateToString из вашего кода
-    function formatResult(res) {
-      if (res instanceof Date) return res.toISOString();
-      return res;
-    }
-
-    window.addEventListener("message", (e) => {
+    window.addEventListener("message", async (e) => {
       if (e.data.type === "run") {
-        // Получаем значения p1 и p2
-        const p1 = (e.data.body.values.p1 || "").toString().toLowerCase();
-        const p2 = (e.data.body.values.p2 || "").toString().toLowerCase().trim();
+        const { values } = e.data.body;
+        // Мы берем код из p3 (или создадим для него отдельное поле)
+        // Для теста сейчас жестко пропишем логику поиска:
+        
+        const p1 = (values.p1 || "").toString();
+        const p2 = (values.p2 || "").toString();
+        
+        // Сама логика
+        const result = p1.toLowerCase().includes(p2.toLowerCase().trim());
 
-        // Логика поиска (вместо eval из оригинала, делаем конкретную задачу)
-        const isFound = p1.includes(p2);
-
-        // Отправляем результат обратно в Glide
-        // Если мы это не отправим — будет вечная загрузка!
-        e.source.postMessage({ 
-          type: "result", 
-          body: formatResult(isFound) 
-        }, e.origin);
+        // ОТПРАВКА ОТВЕТА (прекращает бесконечную загрузку)
+        e.source.postMessage({ type: "result", body: result }, e.origin);
       }
     });
   </script>
