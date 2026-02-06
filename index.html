@@ -1,27 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+    <meta charset="utf-8">
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
 </head>
 <body>
-  <script>
-    window.addEventListener("message", async (e) => {
-      if (e.data.type === "run") {
-        const { values } = e.data.body;
-        // Мы берем код из p3 (или создадим для него отдельное поле)
-        // Для теста сейчас жестко пропишем логику поиска:
-        
-        const p1 = (values.p1 || "").toString();
-        const p2 = (values.p2 || "").toString();
-        
-        // Сама логика
-        const result = p1.toLowerCase().includes(p2.toLowerCase().trim());
+    <script>
+        window.addEventListener("message", (e) => {
+            // Проверяем, что Glide прислал команду на запуск
+            if (e.data.type === "run") {
+                const values = e.data.body.values;
+                
+                // Извлекаем p1 и p2
+                const metadata = (values.p1 || "").toString().toLowerCase();
+                const query = (values.p2 || "").toString().toLowerCase().trim();
+                
+                // Простая логика поиска: есть ли запрос в тексте
+                let result = false;
+                if (query !== "") {
+                    result = metadata.includes(query);
+                }
 
-        // ОТПРАВКА ОТВЕТА (прекращает бесконечную загрузку)
-        e.source.postMessage({ type: "result", body: result }, e.origin);
-      }
-    });
-  </script>
+                // ВАЖНО: Это сообщение останавливает "крутилку" в Glide
+                e.source.postMessage({ 
+                    type: "result", 
+                    body: result 
+                }, e.origin);
+            }
+        });
+    </script>
 </body>
 </html>
