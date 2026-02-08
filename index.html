@@ -1,38 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
     <meta charset="utf-8">
 </head>
 <body>
-    <script>
-        // Функция отправки ответа
-        function send(type, body) {
-            window.parent.postMessage({ type, body }, "*");
-        }
-
-        // Сообщаем, что мы загрузились, каждые 500мс, пока Glide не ответит
-        const readyInterval = setInterval(() => send("ready"), 500);
-
-        window.addEventListener("message", (e) => {
-            if (e.data.type === "run") {
-                // Как только получили данные, перестаем спамить "ready"
-                clearInterval(readyInterval);
-
-                const { code, p1, p2, p3 } = e.data.body.values;
-                let result;
-
-                try {
-                    // Твой код из Glide превращается в функцию
-                    const fn = new Function('p1', 'p2', 'p3', code || 'return null');
-                    result = fn(p1, p2, p3);
-                } catch (err) {
-                    result = "Error: " + err.message;
-                }
-
-                // Отправляем результат обратно
-                send("result", result !== undefined ? result : null);
-            }
-        });
-    </script>
+    <script src="main.js"></script>
 </body>
 </html>
